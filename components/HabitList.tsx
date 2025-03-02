@@ -32,7 +32,7 @@ const HabitItem = ({ habit }: { habit: Habit }) => {
   const getProgressColor = () => {
     if (completionRatio === 1) return 'bg-green-500';
     if (isCompletedToday()) return 'bg-green-500';
-    return 'bg-yellow-500';
+    return 'bg-yellow-500 dark:bg-gray-400';
   };
 
   const items = [
@@ -55,8 +55,9 @@ const HabitItem = ({ habit }: { habit: Habit }) => {
                         >
                             <CircleCheckBig 
                                 size={24} 
-                                color={isCompletedToday() ? '#22c55e' : '#9ca3af'} 
+                                
                                 style={{ marginRight: 8 }}
+                                className={isCompletedToday() ? 'text-green-500 ': 'text-gray-400 '} 
                             />
                         </Pressable>
                         <Text className="flex-1">{habit.name}</Text>
