@@ -15,11 +15,11 @@ import {
 import { Progress } from '~/components/ui/progress';
 import { Text } from '~/components/ui/text';
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip';
-
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '~/components/ui/dialog';
 const GITHUB_AVATAR_URI =
   'https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg';
 
-export default function Screen() {
+export default function StarterIndex() {
   const [progress, setProgress] = React.useState(78);
 
   function updateProgressValue() {
@@ -80,7 +80,6 @@ export default function Screen() {
             </LayoutAnimationConfig>
           </View>
           <Progress value={progress} className='h-2' indicatorClassName='bg-sky-600' />
-          <View />
           <Button
             variant='outline'
             className='shadow shadow-foreground/5'
@@ -88,6 +87,16 @@ export default function Screen() {
           >
             <Text>Update</Text>
           </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>
+                <Text>Open</Text>
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogTitle>Dialog</DialogTitle>
+            </DialogContent>
+          </Dialog>
         </CardFooter>
       </Card>
     </View>
