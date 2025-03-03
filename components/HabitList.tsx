@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Pressable, Platform} from 'react-native';
+import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import { Progress } from '~/components/ui/progress';
 import { Badge } from '~/components/ui/badge';
@@ -22,9 +23,21 @@ import {   ContextMenu,
   ContextMenuSubTrigger,
   ContextMenuTrigger, } from '~/components/ui/context-menu'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '~/components/ui/alert-dialog';
 // HabitItem component to display individual habits
-const HabitItem = ({ habit, completeHabit }: { habit: Habit, completeHabit: (habit: Habit) => void }) => {
+const HabitItem = ({ habit, completeHabit, deleteHabit }: { habit: Habit, completeHabit: (habit: Habit) => void, deleteHabit: (habit: Habit) => void }) => {
+ 
+  const [isAlertDialogOpen, setAlertDialogOpen] = useState(false);
 
   const insets = useSafeAreaInsets();
   const contentInsets = {
@@ -48,6 +61,10 @@ const HabitItem = ({ habit, completeHabit }: { habit: Habit, completeHabit: (hab
     completeHabit(habit);
   };
 
+  const handleDeleteHabit = () => {
+    deleteHabit(habit);
+  };
+
   const handleLongPress = () => {
     console.log(habit);
   };
@@ -68,66 +85,82 @@ const HabitItem = ({ habit, completeHabit }: { habit: Habit, completeHabit: (hab
 
   return (
     <ContextMenu>
-        <ContextMenuTrigger >
-            <View className={`p-4  rounded-lg mb-3 border ${isCompletedToday() ? 'border-green-500' : 'border-gray-200 dark:border-gray-700'}`}>
-                <Pressable onPress={logHabit}>
-
-                <View className="flex-row justify-between items-center mb-2">
-                    <View className="flex-row items-center flex-1">
-                        <Pressable 
-                            onPress={isCompletedToday() ? null : handleCompleteHabit}
-                            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                        >
-                            <CircleCheckBig 
-                                size={24} 
-                                
-                                style={{ marginRight: 8 }}
-                                className={isCompletedToday() ? 'text-green-500 ': 'text-gray-400 '} 
-                            />
-                        </Pressable>
-                        <Text className="flex-1">{habit.name}</Text>
-                    </View>
-                    <Badge variant="outline" className="ml-2">
-                        <Text>{completedThisWeek}/{habit.daysPerWeek}</Text>
-                    </Badge>
-                </View>
-            
-                <Progress 
-                    value={completionRatio * 100} 
-                    className="h-2 w-full"
-                    indicatorClassName={getProgressColor()}
+      <ContextMenuTrigger asChild>
+        <View className={`p-4 active:opacity-50 active:scale-95 rounded-lg mb-3 border ${isCompletedToday() ? 'border-green-500' : 'border-gray-200 dark:border-gray-700'}`}>
+          <View className="flex-row justify-between items-center mb-2">
+            <View className="flex-row items-center flex-1">
+              <Pressable 
+                onPress={isCompletedToday() ? null : handleCompleteHabit}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <CircleCheckBig 
+                  size={24} 
+                  style={{ marginRight: 8 }}
+                  className={isCompletedToday() ? 'text-green-500 ': 'text-gray-400 '} 
                 />
-             </Pressable>
+              </Pressable>
+              <Text className="flex-1">{habit.name}</Text>
             </View>
-            </ContextMenuTrigger>
-                <ContextMenuContent align='start' insets={contentInsets} className='w-64 native:w-72'>
-            <ContextMenuItem inset>
-              <Text>Back</Text>
-              <ContextMenuShortcut>⌘[</ContextMenuShortcut>
-            </ContextMenuItem>
-            <ContextMenuItem inset disabled>
-              <Text>Forward</Text>
-              <ContextMenuShortcut>⌘]</ContextMenuShortcut>
-            </ContextMenuItem>
-          </ContextMenuContent>
-                </ContextMenu>
+            <Badge variant="outline" className="ml-2">
+              <Text>{completedThisWeek}/{habit.daysPerWeek}</Text>
+            </Badge>
+          </View>
+          
+          <Progress 
+            value={completionRatio * 100} 
+            className="h-2 w-full"
+            indicatorClassName={getProgressColor()}
+          />
+        </View>
+      </ContextMenuTrigger>
+      <ContextMenuContent align='start' insets={contentInsets} className='w-64 native:w-72'>
+        <ContextMenuItem inset onPress={logHabit}>
+          <Text>Log Habit</Text>
+        </ContextMenuItem>
+
+
+        <AlertDialog open={isAlertDialogOpen} onOpenChange={setAlertDialogOpen}>
+        <AlertDialogTrigger asChild>
+          <ContextMenuItem inset closeOnPress={false}>
+            <Text className='text-destructive font-semibold'>Delete Habit</Text>
+            <Trash size={18} className='text-destructive  ml-auto mr-4' />
+          </ContextMenuItem>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle >Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete all of your habit's data.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>
+              <Text>Cancel</Text>
+            </AlertDialogCancel>
+            <AlertDialogAction onPress={handleDeleteHabit} className='bg-destructive text-destructive-foreground'>
+              <Text>Continue</Text>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      </ContextMenuContent>
+    </ContextMenu>
                
 
   );
 };
 
 export default function HabitList() {
-  const { habits, fetchHabits, completeHabit } = useHabitStore();
+  const { habits, fetchHabits, completeHabit, deleteHabit} = useHabitStore();
 
   useEffect(() => {
     fetchHabits();
-    console.log(habits);
   }, []);
 
   return (
     <>
       {habits.map((habit: Habit) => (
-        <HabitItem key={habit.id} habit={habit} completeHabit={completeHabit} />
+        <HabitItem key={habit.id} habit={habit} completeHabit={completeHabit} deleteHabit={deleteHabit} />
       ))}
           
     </>

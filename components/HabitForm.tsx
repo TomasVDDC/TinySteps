@@ -90,9 +90,7 @@ export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
 
     <Controller
         control={control}
-        rules={{
-          required: true,
-        }}
+
         render={({ field: { onChange, onBlur, value } }) => (
             <View className='-ml-3'>
           <DateTimePicker
@@ -113,9 +111,7 @@ export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
 
         <Controller
         control={control}
-        rules={{
-          required: true,
-        }}
+      
         render={({ field: { onChange, onBlur, value } }) => (
 
    
