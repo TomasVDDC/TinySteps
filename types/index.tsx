@@ -1,7 +1,7 @@
 export interface Habit {
     id: string;
     name: string;
-    frequencyPerWeek: number;
+    frequencyPerWeek: number; // 1-7
     notificationSchedule: {
       monday?: string; // Time (HH:MM)     
       tuesday?: string;   

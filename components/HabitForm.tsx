@@ -32,6 +32,7 @@ export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
 
   return (
     <>
+      <Text className='text-sm font-bold -mb-2'>Habit Name</Text>
       <Controller
         control={control}
         rules={{
@@ -47,14 +48,17 @@ export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
         )}
         name="habitName"
       />
-      
+      {errors.habitName && <Text className='text-red-500'>This is required.</Text>}
+
       
 
-      <Text className='text-sm font-bold'>Days Per Week</Text>
+      <Text className='text-sm font-bold -mb-2'>Days Per Week</Text>
 
       <Controller
         control={control}
-     
+        rules={{
+            required: true,
+          }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Select value={value} onValueChange={onChange}>
       <SelectTrigger className='w-[60px]'>
@@ -80,14 +84,17 @@ export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
     name="daysPerWeek"
     />
 
-    <Text className='text-sm font-bold'>Notification Time</Text>
+    {errors.daysPerWeek && <Text className='text-red-500'>This is required.</Text>}
 
-<Controller
+    <Text className='text-sm font-bold -mb-2'>Notification Time</Text>
+
+    <Controller
         control={control}
         rules={{
           required: true,
         }}
         render={({ field: { onChange, onBlur, value } }) => (
+            <View className='-ml-3'>
           <DateTimePicker
             testID="dateTimePicker"
             value={value}
@@ -98,10 +105,11 @@ export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
               onChange(currentDate);
             }}
           />
+          </View>
         )}
         name="notificationTime"
-      />
-        <Text className='text-sm font-bold'>Notification Days</Text>
+    />
+        <Text className='text-sm font-bold -mb-3' >Notification Days</Text>
 
         <Controller
         control={control}
@@ -138,7 +146,7 @@ export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
     name="notificationDays"
     />
 
-    <View className="flex flex-row justify-end space-x-2">
+    <View className="flex flex-row justify-end gap-2">
     <Button variant="outline" onPress={onCancel}>
         <Text>Cancel</Text>
     </Button>

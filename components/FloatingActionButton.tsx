@@ -6,6 +6,7 @@ import { Plus } from "~/lib/icons/Plus";
 import { Pressable } from "react-native";
 import HabitForm from "~/components/HabitForm";
 import { useState } from "react";
+import { Habit } from "~/types";
 
 export default function FloatingActionButton() {
   const [open, setOpen] = useState(false);
@@ -16,6 +17,7 @@ export default function FloatingActionButton() {
       daysPerWeek: data.daysPerWeek.value 
     };
     console.log(transformedData);
+
     setOpen(false);
   };
 
@@ -37,7 +39,7 @@ export default function FloatingActionButton() {
         <DialogHeader>
           <DialogTitle>Add Habit</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
+            Add your habit and click save when you're done.
           </DialogDescription>
         </DialogHeader>
 
