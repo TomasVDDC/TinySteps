@@ -6,17 +6,14 @@ import { Plus } from "~/lib/icons/Plus";
 import { Pressable } from "react-native";
 import HabitForm from "~/components/HabitForm";
 import { useState } from "react";
-import { Habit } from "~/types";
+import useHabitStore from "~/utils/store";
 
 export default function FloatingActionButton() {
   const [open, setOpen] = useState(false);
+  const { createHabitFromForm } = useHabitStore()
 
   const handleSubmit = (data: any) => {
-    const transformedData = {
-      ...data,
-      daysPerWeek: data.daysPerWeek.value 
-    };
-    console.log(transformedData);
+    createHabitFromForm(data);
 
     setOpen(false);
   };
@@ -25,7 +22,9 @@ export default function FloatingActionButton() {
     setOpen(false);
   };
 
-  return (   
+
+
+  return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Pressable

@@ -1,22 +1,36 @@
 import { create } from 'zustand'
 import { Habit } from '~/types'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from 'uuid';
+import { keepOnlyDate, keepOnlyTime } from '~/utils/date-splitter';
+interface FormData {
+  habitName: string;
+  notificationTime: Date;
+  //We don't need the label but it was easier to process outside
+  daysPerWeek: {label: string, value: string};
+  notificationDays: string[];
+}
 
 interface HabitState {
   habits: Habit[]
   loading: boolean
   
   // Actions
+  createHabitFromForm: (formData: FormData) => Promise<void>
   fetchHabits: () => Promise<void>
-  addHabit: (habit: Habit) => Promise<void>
   completeHabit: (habit: Habit) => Promise<void>
   deleteHabit: (habit: Habit) => Promise<void>
 }
 
 
 const storeData = async (value: any) => {
-  const jsonValue = JSON.stringify(value);
-  await AsyncStorage.setItem('@TinySteps:habits', jsonValue);
+    try {
+        const jsonValue = JSON.stringify(value);
+        await AsyncStorage.setItem('@TinySteps:habits', jsonValue);
+    } catch (error) {
+        console.error("Error in storeData:", error)
+    }
 }
 
 
@@ -24,6 +38,7 @@ const useHabitStore = create<HabitState>((set, get) => ({
   habits: [],
   loading: false,
   
+
   fetchHabits: async () => {
     set({ loading: true })
     try {
@@ -36,9 +51,27 @@ const useHabitStore = create<HabitState>((set, get) => ({
     }
   },
   
-  addHabit: async (habit: Habit) => {
+
+  createHabitFromForm: async (formData: FormData) => {
+    
+      const timeString = keepOnlyTime(formData.notificationTime);
+
+      const notificationSchedule = formData.notificationDays.reduce((total: Record<string, string>, day) => ({
+        ...total,
+        [day]: timeString
+      }), {});
+
+      const newHabit: Habit = {
+        id: uuidv4(),
+        name: formData.habitName,
+        daysPerWeek: parseInt(formData.daysPerWeek.value),
+        notificationSchedule: notificationSchedule,
+        recentCompletions: [],
+        createdAt: new Date().toISOString()
+      };
+
     const { habits } = get()
-    const updatedHabits = [...habits, habit]
+    const updatedHabits = [...habits, newHabit]
     set({ habits: updatedHabits })
     await storeData(updatedHabits)
   },
@@ -47,7 +80,7 @@ const useHabitStore = create<HabitState>((set, get) => ({
     const { habits } = get()
     const updatedHabits = habits.map((h: Habit) => 
       h.id === habit.id 
-        ? { ...h, recentCompletions: [...h.recentCompletions, new Date().toISOString()] } 
+        ? { ...h, recentCompletions: [...h.recentCompletions, keepOnlyDate(new Date())] } 
         : h
     )
     set({ habits: updatedHabits })
