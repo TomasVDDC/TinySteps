@@ -99,7 +99,7 @@ const HabitItem = ({ habit, completeHabit, deleteHabit }: { habit: Habit, comple
                   className={isCompletedToday() ? 'text-green-500 ': 'text-gray-400 '} 
                 />
               </Pressable>
-              <Text className="flex-1">{habit.name}</Text>
+              <Text className="flex-1 text-lg">{habit.name}</Text>
             </View>
             <Badge variant="outline" className="ml-2">
               <Text>{completedThisWeek}/{habit.daysPerWeek}</Text>

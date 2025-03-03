@@ -30,9 +30,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="calendar"
         options={{
-          title: 'Explore',
+          title: 'Calendar',
           tabBarIcon: ({ color }) =>  <Info size={28} color={color} />,
         }}
       />
