@@ -35,18 +35,6 @@ export default function CalendarScreen() {
     'blue',
   ];
 
-  // HAVING A CUSTOM WAS SLOWING DOWN THE CALENDAR, I modified directly the dot style in the node_modules folder
-  // const calendarTheme = {
-  
-  //   dotStyle: {
-  //     width: 10,
-  //     height: 10,
-  //     borderRadius: 5,
-  //     marginTop: 1,
-  //     marginLeft: 1,
-  //     marginRight: 1
-  //   }
-  // };
 
   // Create a mapping of habit IDs to colors
   const habitColorMap: {[habitId: string]: string} = habits.reduce((map, habit, index) => {
@@ -92,16 +80,18 @@ export default function CalendarScreen() {
   return (
 
     <>
-      <TrackedCalendarList
-        pastScrollRange={20}
-        futureScrollRange={20}
-        scrollEnabled={true}
-        showScrollIndicator={true}
-        markingType={"multi-dot"}
-        markedDates={markedDates}
-      />
 
-      <View className="absolute bottom-32 w-full flex-col gap-2 items-center justify-center">
+      <CalendarList
+      pastScrollRange={24}
+      futureScrollRange={3}
+      scrollEnabled={true}
+      showScrollIndicator={true}
+
+      markingType={'multi-dot'}
+      markedDates={markedDates}
+      />  
+
+      <View className="absolute bottom-32 android:bottom-16 w-full flex-col gap-2 items-center justify-center">
         <ToggleGroup className="flex-col gap-0 items-start bg-white rounded-md p-3 border-2 border-gray-100" value={habitIdToggled} onValueChange={handleHabitIdToggled} type='single'>
           {habitHistory.map((History, index) => (
             <ToggleGroupItem size='none' key={index} value={History.habitId} aria-label={History.habitId}>
@@ -122,58 +112,5 @@ export default function CalendarScreen() {
 
 
 // Custom wrapper for CalendarList to track renders and timing
-const TrackedCalendarList = ({ markingType, markedDates, ...props }) => {
 
 
-    
-  const renderCount = useRef(0);
-  const lastRenderTime = useRef(0);
-
-  // Log render count and timing on each render
-  useEffect(() => {
-    const startTime = performance.now();
-    renderCount.current += 1;
-
-    // Use requestAnimationFrame to measure after render is committed
-    requestAnimationFrame(() => {
-      const endTime = performance.now();
-      const duration = endTime - startTime;
-      lastRenderTime.current = duration;
-      console.log(
-        `CalendarList Render #${renderCount.current} took ${duration.toFixed(
-          2
-        )}ms`
-      );
-    });
-  }); // No dependencies means it runs on every render
-
-  return (
-
-    <CalendarList
-      markingType={markingType}
-      markedDates={markedDates}
-
-      {...props}
-    />
-    
-  );
-};
-
-{/* <CalendarList
-// Callback which gets executed when visible months change in scroll view. Default = undefined
-onVisibleMonthsChange={(months) => {console.log('now these months are visible', months);}}
-// Max amount of months allowed to scroll to the past. Default = 50
-pastScrollRange={3}
-// Max amount of months allowed to scroll to the future. Default = 50
-futureScrollRange={3}
-// Enable or disable scrolling of calendar list
-scrollEnabled={true}
-// Enable or disable vertical scroll indicator. Default = false
-showScrollIndicator={true}
-// Apply the custom theme with bigger dots
-theme={calendarTheme}
-markingType={'multi-dot'}
-markedDates={markedDates}
-
-
-/>  */}
