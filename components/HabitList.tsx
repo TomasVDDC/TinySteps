@@ -154,10 +154,11 @@ const HabitItem = ({ habit, completeHabit, deleteHabitAndHistory, archiveHabitCo
 };
 
 export default function HabitList() {
-  const { habits, fetchHabits, completeHabit, deleteHabitAndHistory, archiveHabitCompletions} = useHabitStore();
+  const { habits, fetchHabits, completeHabit, deleteHabitAndHistory, archiveHabitCompletions, fetchDummyData} = useHabitStore();
 
   useEffect(() => {
-    fetchHabits();
+    // fetchHabits();
+    fetchDummyData();
   }, []);
 
   return (

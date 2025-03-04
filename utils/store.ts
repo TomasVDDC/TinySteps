@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from 'uuid';
 import { keepOnlyDate, keepOnlyTime } from '~/utils/date-splitter';
+import { dummyHabits, dummyHabitHistory } from '~/dummy-data';
 
 
 interface FormData {
@@ -26,6 +27,9 @@ interface HabitState {
   completeHabit: (habit: Habit) => Promise<void>
   deleteHabitAndHistory: (habit: Habit) => Promise<void>
   archiveHabitCompletions: (habitId: string) => Promise<void>
+
+  
+  fetchDummyData: () => Promise<void>
 }
 
 
@@ -53,6 +57,13 @@ const useHabitStore = create<HabitState>((set, get) => ({
   habitHistory: [],
   loading: false,
   
+
+  fetchDummyData: async () => {
+    set({ habits: dummyHabits, habitHistory: dummyHabitHistory })
+    await storeData(dummyHabits)
+    await storeHistoryData(dummyHabitHistory)
+  },
+
 // ************** HABIT FUNCTIONS **************
   fetchHabits: async () => {
     set({ loading: true })

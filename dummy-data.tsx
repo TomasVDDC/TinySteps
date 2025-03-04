@@ -122,7 +122,7 @@ export const dummyHabits: Habit[] = [
 // Dummy habit history data
 export const dummyHabitHistory: HabitHistory[] = [
   {
-    habitId: '7533dc2c-11bd-4612-a2b2-8158a5737ea6',
+    habitId: '1',
     completionDates: [
       ...dummyHabits[0].recentCompletions,
       getDaysAgoString(7),
@@ -145,7 +145,7 @@ export const dummyHabitHistory: HabitHistory[] = [
     ],
   },
   {
-    habitId: 'b1ca9a00-5743-4055-b24a-0712a1fd6710',
+    habitId: '2',
     completionDates: [
       ...dummyHabits[1].recentCompletions,
       getDaysAgoString(7),
@@ -166,7 +166,7 @@ export const dummyHabitHistory: HabitHistory[] = [
     ],
   },
   {
-    habitId: 'c0c01565-8560-4056-82bf-850e44fe27ed',
+    habitId: '3',
     completionDates: [
       ...dummyHabits[2].recentCompletions,
       getDaysAgoString(8),
@@ -192,7 +192,7 @@ export const dummyHabitHistory: HabitHistory[] = [
     ],
   },
   {
-    habitId: '2a01327d-e954-42e2-8c2c-18ea9c198e63',
+    habitId: '4',
     completionDates: [
       ...dummyHabits[3].recentCompletions,
       getDaysAgoString(7),
@@ -204,7 +204,7 @@ export const dummyHabitHistory: HabitHistory[] = [
     ],
   },
   {
-    habitId: '4b85195e-2af2-4971-bfd2-60b550b47edf',
+    habitId: '5',
     completionDates: [
       ...dummyHabits[4].recentCompletions,
       getDaysAgoString(7),
