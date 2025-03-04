@@ -2,32 +2,29 @@ import { View } from "react-native";
 import { Text } from "~/components/ui/text";
 import {Calendar, CalendarList, Agenda, CalendarProps } from 'react-native-calendars';
 import { useState } from "react";
-import { dummyHabitHistory } from "~/dummy-data";
+// import { dummyHabitHistory } from "~/dummy-data";
 import { HabitHistory } from "~/types";
-import React from "react";
+import React, { useEffect } from "react";
+import useHabitStore  from "~/utils/store";
 
-export default function ExploreScreen() {
 
+export default function CalendarScreen() {
+
+  const { habits, habitHistory, fetchHabitHistory } = useHabitStore();
+
+  useEffect(() => {
+    fetchHabitHistory();
+    console.log(habitHistory);
+  }, []);
+
+  // Currently I am not using the tailwindcolors because the names are not supported by react-native-calendars
   const Colors = [
     'red',
     'orange',
-    'amber',
     'yellow',
-    'lime',
     'green',
-    'emerald',
-    'teal',
-    'cyan',
-    'sky',
     'blue',
-    'indigo',
-    'violet',
-    'purple',
-    'fuchsia',
-    'pink',
-    'rose'
   ];
-
 
   const [selected, setSelected] = useState('');
 
@@ -49,15 +46,15 @@ export default function ExploreScreen() {
     return dateToHabitsMap;
   }
   
-  const markedDates = transformHabitHistory(dummyHabitHistory);
+  const markedDates = transformHabitHistory(habitHistory);
 
   // Custom theme to make dots bigger
   const calendarTheme = {
     // Increase the size of dots
     dotStyle: {
-      width: 8,
-      height: 8,
-      borderRadius: 4,
+      width: 10,
+      height: 10,
+      borderRadius: 5,
       marginTop: 1,
       marginLeft: 1,
       marginRight: 1
@@ -85,9 +82,21 @@ export default function ExploreScreen() {
 
  
     />
-    <View className="absolute bottom-32 w-full bg-red-500 flex items-center justify-center">
-      
-      <Text>Hello</Text>
+
+
+
+
+    <View className="absolute bottom-32 w-full flex-col gap-2 items-center justify-center bg-white">
+    {habitHistory.map((History, index)   => (
+
+<View key={index} className="flex-row items-center  gap-2">
+  {/* Tailwind classnames need to be written in full, not be dinamically generated. Cant do this bg-${Colors[index]}-300 */}
+  <View className="w-3 h-3 rounded-full mt-[1px] mx-[1px]" style={{backgroundColor: Colors[index]}} />
+  <Text>{habits.find(habit => habit.id === History.habitId)?.name}</Text>
+</View>
+))}
+
+
     </View>
     </>
     
@@ -95,3 +104,11 @@ export default function ExploreScreen() {
 }
 
 
+// {dummyHabitHistory.map((habitHistory, index)   => (
+
+//   <View key={index} className="flex-row items-center  gap-2">
+//     {/* Tailwind classnames need to be written in full, not be dinamically generated. Cant do this bg-${Colors[index]}-300 */}
+//     <View className="w-3 h-3 rounded-full mt-[1px] mx-[1px]" style={{backgroundColor: Colors[index]}} />
+//     <Text>{habits.find(habit => habit.id === habitHistory.habitId)?.name}</Text>
+//   </View>
+// ))}

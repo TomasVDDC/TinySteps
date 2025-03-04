@@ -34,8 +34,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '~/components/ui/alert-dialog';
+
+
 // HabitItem component to display individual habits
-const HabitItem = ({ habit, completeHabit, deleteHabit }: { habit: Habit, completeHabit: (habit: Habit) => void, deleteHabit: (habit: Habit) => void }) => {
+const HabitItem = ({ habit, completeHabit, deleteHabitAndHistory, archiveHabitCompletions }: { habit: Habit, completeHabit: (habit: Habit) => void, deleteHabitAndHistory: (habit: Habit) => void, archiveHabitCompletions: (habitId: string) => void }) => {
  
   const [isAlertDialogOpen, setAlertDialogOpen] = useState(false);
 
@@ -59,10 +61,11 @@ const HabitItem = ({ habit, completeHabit, deleteHabit }: { habit: Habit, comple
   
   const handleCompleteHabit = () => {
     completeHabit(habit);
+    archiveHabitCompletions(habit.id)
   };
 
   const handleDeleteHabit = () => {
-    deleteHabit(habit);
+    deleteHabitAndHistory(habit);
   };
 
   const handleLongPress = () => {
@@ -151,7 +154,7 @@ const HabitItem = ({ habit, completeHabit, deleteHabit }: { habit: Habit, comple
 };
 
 export default function HabitList() {
-  const { habits, fetchHabits, completeHabit, deleteHabit} = useHabitStore();
+  const { habits, fetchHabits, completeHabit, deleteHabitAndHistory, archiveHabitCompletions} = useHabitStore();
 
   useEffect(() => {
     fetchHabits();
@@ -160,7 +163,7 @@ export default function HabitList() {
   return (
     <>
       {habits.map((habit: Habit) => (
-        <HabitItem key={habit.id} habit={habit} completeHabit={completeHabit} deleteHabit={deleteHabit} />
+        <HabitItem key={habit.id} habit={habit} completeHabit={completeHabit} deleteHabitAndHistory={deleteHabitAndHistory} archiveHabitCompletions={archiveHabitCompletions} />
       ))}
           
     </>

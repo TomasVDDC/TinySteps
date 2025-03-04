@@ -26,7 +26,7 @@ export const dummyHabits: Habit[] = [
   {
     id: '1',
     name: 'Morning Meditation',
-    frequencyPerWeek: 4,
+    daysPerWeek: 4,
     notificationSchedule: {
       monday: '07:00',
       tuesday: '07:00',
@@ -48,7 +48,7 @@ export const dummyHabits: Habit[] = [
   {
     id: '2',
     name: 'Read 20 Pages',
-    frequencyPerWeek: 5,
+    daysPerWeek: 5,
     notificationSchedule: {
       monday: '21:00',
       tuesday: '21:00',
@@ -66,7 +66,7 @@ export const dummyHabits: Habit[] = [
   {
     id: '3',
     name: 'Drink 8 Glasses of Water',
-    frequencyPerWeek: 7,
+    daysPerWeek: 7,
     notificationSchedule: {
       monday: '09:00',
       tuesday: '09:00',
@@ -88,7 +88,7 @@ export const dummyHabits: Habit[] = [
   {
     id: '4',
     name: 'Exercise',
-    frequencyPerWeek: 3,
+    daysPerWeek: 3,
     notificationSchedule: {
       monday: '18:00',
       wednesday: '18:00',
@@ -103,7 +103,7 @@ export const dummyHabits: Habit[] = [
   {
     id: '5',
     name: 'Practice Guitar',
-    frequencyPerWeek: 4,
+    daysPerWeek: 4,
     notificationSchedule: {
       monday: '19:30',
       wednesday: '19:30',
@@ -122,7 +122,7 @@ export const dummyHabits: Habit[] = [
 // Dummy habit history data
 export const dummyHabitHistory: HabitHistory[] = [
   {
-    habitId: '1',
+    habitId: '7533dc2c-11bd-4612-a2b2-8158a5737ea6',
     completionDates: [
       ...dummyHabits[0].recentCompletions,
       getDaysAgoString(7),
@@ -145,7 +145,7 @@ export const dummyHabitHistory: HabitHistory[] = [
     ],
   },
   {
-    habitId: '2',
+    habitId: 'b1ca9a00-5743-4055-b24a-0712a1fd6710',
     completionDates: [
       ...dummyHabits[1].recentCompletions,
       getDaysAgoString(7),
@@ -166,7 +166,7 @@ export const dummyHabitHistory: HabitHistory[] = [
     ],
   },
   {
-    habitId: '3',
+    habitId: 'c0c01565-8560-4056-82bf-850e44fe27ed',
     completionDates: [
       ...dummyHabits[2].recentCompletions,
       getDaysAgoString(8),
@@ -192,7 +192,7 @@ export const dummyHabitHistory: HabitHistory[] = [
     ],
   },
   {
-    habitId: '4',
+    habitId: '2a01327d-e954-42e2-8c2c-18ea9c198e63',
     completionDates: [
       ...dummyHabits[3].recentCompletions,
       getDaysAgoString(7),
@@ -204,7 +204,7 @@ export const dummyHabitHistory: HabitHistory[] = [
     ],
   },
   {
-    habitId: '5',
+    habitId: '4b85195e-2af2-4971-bfd2-60b550b47edf',
     completionDates: [
       ...dummyHabits[4].recentCompletions,
       getDaysAgoString(7),
