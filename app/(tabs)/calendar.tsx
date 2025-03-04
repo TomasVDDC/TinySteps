@@ -3,14 +3,16 @@ import { Text } from "~/components/ui/text";
 import {Calendar, CalendarList, Agenda, CalendarProps } from 'react-native-calendars';
 import { useState } from "react";
 // import { dummyHabitHistory } from "~/dummy-data";
-import { HabitHistory } from "~/types";
+import { Habit, HabitHistory } from "~/types";
 import React, { useEffect } from "react";
 import useHabitStore  from "~/utils/store";
+import { ToggleGroup, ToggleGroupIcon, ToggleGroupItem } from '~/components/ui/toggle-group';
 
 
 export default function CalendarScreen() {
 
   const { habits, habitHistory, fetchHabitHistory } = useHabitStore();
+  const [value, setValue] = useState<string | undefined>('');
 
   useEffect(() => {
     fetchHabitHistory();
@@ -86,29 +88,42 @@ export default function CalendarScreen() {
 
 
 
-    <View className="absolute bottom-32 w-full flex-col gap-2 items-center justify-center bg-white">
-    {habitHistory.map((History, index)   => (
+    <View className="absolute bottom-32 w-full flex-col gap-2 items-center justify-center ">
 
-<View key={index} className="flex-row items-center  gap-2">
+
+
+
+
+      <ToggleGroup className="flex-col gap-0  items-start bg-white rounded-md p-3 border-2 border-gray-100" value={value} onValueChange={setValue} type='single'>
+      {habitHistory.map((History, index)   => (
+        <ToggleGroupItem size='none'  key={index} value={History.habitId} aria-label={History.habitId}>
+        <View  className="flex-row items-center gap-2 px-2 py-[1px]">
   {/* Tailwind classnames need to be written in full, not be dinamically generated. Cant do this bg-${Colors[index]}-300 */}
   <View className="w-3 h-3 rounded-full mt-[1px] mx-[1px]" style={{backgroundColor: Colors[index]}} />
-  <Text>{habits.find(habit => habit.id === History.habitId)?.name}</Text>
+  <Text  className=" ">{habits.find(habit => habit.id === History.habitId)?.name}</Text>
 </View>
-))}
+        </ToggleGroupItem>
+      ))}
+   
+      </ToggleGroup>
 
 
     </View>
+
+
+
     </>
     
   );
 }
 
 
-// {dummyHabitHistory.map((habitHistory, index)   => (
 
-//   <View key={index} className="flex-row items-center  gap-2">
-//     {/* Tailwind classnames need to be written in full, not be dinamically generated. Cant do this bg-${Colors[index]}-300 */}
-//     <View className="w-3 h-3 rounded-full mt-[1px] mx-[1px]" style={{backgroundColor: Colors[index]}} />
-//     <Text>{habits.find(habit => habit.id === habitHistory.habitId)?.name}</Text>
-//   </View>
-// ))}
+//      {habitHistory.map((History, index)   => (
+
+// <View key={index} className="flex-row items-center  gap-2">
+//   {/* Tailwind classnames need to be written in full, not be dinamically generated. Cant do this bg-${Colors[index]}-300 */}
+//   <View className="w-3 h-3 rounded-full mt-[1px] mx-[1px]" style={{backgroundColor: Colors[index]}} />
+//   <Text>{habits.find(habit => habit.id === History.habitId)?.name}</Text>
+// </View>
+// ))} 
