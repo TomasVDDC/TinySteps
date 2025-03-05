@@ -3,10 +3,11 @@ import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { View, ScrollView } from 'react-native';
+import { View, Platform } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 import { ToggleGroup, ToggleGroupItem, ToggleGroupIcon } from '~/components/ui/toggle-group';
-import React from 'react';
+import React, { useState } from 'react';
 
 
 type HabitFormData = {
@@ -30,6 +31,8 @@ export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
       notificationDays: []
     }
   });
+  
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
   return (
     <>
@@ -91,9 +94,9 @@ export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
 
     <Controller
         control={control}
-
         render={({ field: { onChange, onBlur, value } }) => (
-            <View className='-ml-3'>
+            Platform.OS === 'ios' ? (
+            <View >
           <DateTimePicker
             testID="dateTimePicker"
             value={value}
@@ -105,6 +108,32 @@ export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
             }}
           />
           </View>
+            ) : (
+                <View>
+                    <Button 
+                      variant="outline" 
+                      onPress={() => setShowTimePicker(true)}
+                    >
+                      <Text>{value.toLocaleTimeString()}</Text>
+                    </Button>
+                    {showTimePicker && (
+                      <DateTimePicker
+                        testID="dateTimePicker"
+                        value={value}
+                        mode={"time"}
+                        is24Hour={true}
+                        onChange={(event, selectedDate) => {
+                          setShowTimePicker(false);
+                          // Only update if not canceled (selectedDate is defined)
+                          if (selectedDate) {
+                            const currentDate = selectedDate;
+                            onChange(currentDate);
+                          }
+                        }}
+                      />
+                    )}
+                </View>
+            )
         )}
         name="notificationTime"
     />

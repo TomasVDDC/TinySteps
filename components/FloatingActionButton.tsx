@@ -7,14 +7,14 @@ import { Pressable } from "react-native";
 import HabitForm from "~/components/HabitForm";
 import { useState } from "react";
 import useHabitStore from "~/utils/store";
-
+import { setWeeklyNotifications } from "~/utils/notifications";
 export default function FloatingActionButton() {
   const [open, setOpen] = useState(false);
   const { createHabitFromForm } = useHabitStore()
 
   const handleSubmit = (data: any) => {
     createHabitFromForm(data);
-
+    setWeeklyNotifications();
     setOpen(false);
   };
 
