@@ -92,13 +92,13 @@ export default function CalendarScreen() {
       />  
 
       <View className="absolute bottom-32 android:bottom-16 w-full flex-col gap-2 items-center justify-center">
-        <ToggleGroup className="flex-col gap-0 items-start bg-white rounded-md p-3 border-2 border-gray-100" value={habitIdToggled} onValueChange={handleHabitIdToggled} type='single'>
+        <ToggleGroup className="flex-col gap-0 items-start bg-white rounded-md p-3 border-2 border-gray-100 dark:border-gray-700 dark:bg-gray-600" value={habitIdToggled} onValueChange={handleHabitIdToggled} type='single'>
           {habitHistory.map((History, index) => (
-            <ToggleGroupItem size='none' key={index} value={History.habitId} aria-label={History.habitId}>
-              <View className="flex-row items-center gap-2 px-2 py-[1px]">
+            <ToggleGroupItem size='none' key={index} value={History.habitId} aria-label={History.habitId} asChild>
+              <View className="flex-row items-center gap-2 px-2 py-[1px] ">
                 {/* Tailwind classnames need to be written in full, not be dinamically generated. Cant do this bg-${Colors[index]}-300 */}
                 <View className="w-3 h-3 rounded-full mt-[1px] mx-[1px]" style={{backgroundColor: habitColorMap[History.habitId]}} />
-                <Text className="">{habits.find(habit => habit.id === History.habitId)?.name}</Text>
+                <Text >{habits.find(habit => habit.id === History.habitId)?.name}</Text>
               </View>
             </ToggleGroupItem>
           ))}
