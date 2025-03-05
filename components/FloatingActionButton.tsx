@@ -28,7 +28,7 @@ export default function FloatingActionButton() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Pressable
-          className="absolute bottom-32 right-0 rounded-full dark:bg-white bg-yellow-500 p-4 shadow-lg dark:shadow-white">
+          className="absolute android:bottom-6 bottom-32 right-0 rounded-full dark:bg-white bg-yellow-500 p-4 shadow-lg dark:shadow-white">
           <View className="flex items-center justify-center w-11 h-11">
             <Plus size={24} className="dark:text-gray-600 text-white" />
           </View>

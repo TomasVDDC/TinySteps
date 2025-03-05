@@ -44,6 +44,8 @@ export default function TabLayout() {
           title: 'Calendar',
           tabBarIcon: ({ color }) => <Info size={28} color={color} />,
           tabBarShowLabel: true,
+          // This is to prevent the calendar from being lazy loaded - took too long to load
+          lazy: false,
           tabBarButton: (props) => (
             <Pressable
               {...props}
