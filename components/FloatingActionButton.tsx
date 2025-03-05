@@ -7,17 +7,21 @@ import { Pressable } from "react-native";
 import HabitForm from "~/components/HabitForm";
 import { useState } from "react";
 import useHabitStore from "~/utils/store";
-import { setWeeklyNotifications } from "~/utils/notifications";
+import { setWeeklyNotifications, clearScheduledNotifications } from "~/utils/notifications";
 import { FormData } from "~/types";
 import { keepOnlyTime } from "~/utils/date-splitter";
 
-
 export default function FloatingActionButton() {
   const [open, setOpen] = useState(false);
-  const { createHabitFromForm } = useHabitStore()
+  const { createHabitFromForm } = useHabitStore();
 
   const handleSubmit = (data: FormData) => {
     createHabitFromForm(data);
+
+    // Clear scheduled notifications
+    clearScheduledNotifications();
+
+    // Set weekly notifications
     const notificationTime = keepOnlyTime(data.notificationDate);
     setWeeklyNotifications(notificationTime, data.notificationDays);
 
@@ -28,12 +32,10 @@ export default function FloatingActionButton() {
     setOpen(false);
   };
 
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Pressable
-          className="absolute android:bottom-6 bottom-32 right-0 rounded-full dark:bg-white bg-yellow-500 p-4 shadow-lg dark:shadow-white">
+        <Pressable className="absolute android:bottom-6 bottom-32 right-0 rounded-full dark:bg-white bg-yellow-500 p-4 shadow-lg dark:shadow-white">
           <View className="flex items-center justify-center w-11 h-11">
             <Plus size={24} className="dark:text-gray-600 text-white" />
           </View>
@@ -42,13 +44,11 @@ export default function FloatingActionButton() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add Habit</DialogTitle>
-          <DialogDescription>
-            Add your habit and click save when you're done.
-          </DialogDescription>
+          <DialogDescription>Add your habit and click save when you're done.</DialogDescription>
         </DialogHeader>
 
         <HabitForm onSubmit={handleSubmit} onCancel={handleCancel} />
       </DialogContent>
     </Dialog>
   );
-}       
+}
