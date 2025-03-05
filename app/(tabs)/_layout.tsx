@@ -1,75 +1,43 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform, Pressable } from 'react-native';
-import { ThemeToggle } from '~/components/ThemeToggle';
-import { Home } from '~/lib/icons/Home';
-import { Info } from '~/lib/icons/Info';
-
+import { Tabs } from "expo-router";
+import React from "react";
+import { Platform, Pressable } from "react-native";
+import { ThemeToggle } from "~/components/ThemeToggle";
+import { Home } from "~/lib/icons/Home";
+import { Info } from "~/lib/icons/Info";
 
 export default function TabLayout() {
-
-
   return (
     <Tabs
       screenOptions={{
-      
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
+            position: "absolute",
           },
           default: {},
         }),
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-            title: 'Habits',
+          title: "Habits",
 
-            headerRight: () => <ThemeToggle />,
-            tabBarIcon: ({ color }) => <Home size={28} color={color} />,
-            tabBarShowLabel: true,
-            tabBarButton: (props) => (
-              <Pressable
-                {...props}
-                android_ripple={{ color: 'transparent'}}
-                style={props.style}
-              />
-            ),
+          headerRight: () => <ThemeToggle />,
+          tabBarIcon: ({ color }) => <Home size={28} color={color} />,
+          tabBarShowLabel: true,
+          tabBarButton: (props) => <Pressable {...props} android_ripple={{ color: "transparent" }} style={props.style} />,
         }}
       />
       <Tabs.Screen
         name="calendar"
         options={{
-          title: 'Calendar',
+          title: "Calendar",
           tabBarIcon: ({ color }) => <Info size={28} color={color} />,
           tabBarShowLabel: true,
           // This is to prevent the calendar from being lazy loaded - took too long to load
           lazy: false,
-          tabBarButton: (props) => (
-            <Pressable
-              {...props}
-              android_ripple={{ color: 'transparent'}}
-              style={props.style}
-              
-            />
-          ),
-        }}
-      />
-        <Tabs.Screen
-        name="notifications"
-        options={{
-          title: 'Notifications',
-          tabBarIcon: ({ color }) => <Info size={28} color={color} />,
-          tabBarShowLabel: true,
-          tabBarButton: (props) => (
-            <Pressable
-              {...props}
-              android_ripple={{ color: 'transparent'}}
-              style={props.style}
-              
-            />
-          ),
+          tabBarButton: (props) => <Pressable {...props} android_ripple={{ color: "transparent" }} style={props.style} />,
         }}
       />
     </Tabs>
