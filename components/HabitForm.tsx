@@ -8,26 +8,19 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 import { ToggleGroup, ToggleGroupItem, ToggleGroupIcon } from '~/components/ui/toggle-group';
 import React, { useState } from 'react';
-
-
-type HabitFormData = {
-  habitName: string;
-  notificationTime: Date;
-  daysPerWeek: string;
-  notificationDays: string[];
-};
+import { FormData } from '~/types';
 
 type HabitFormProps = {
-  onSubmit: (data: HabitFormData) => void;
+  onSubmit: (data: FormData) => void;
   onCancel: () => void;
 };
 
 export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
-  const { control, handleSubmit, formState: { errors } } = useForm<HabitFormData>({
+    const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
     defaultValues: {
       habitName: '',
-      notificationTime: new Date(),
-      daysPerWeek: '',
+      notificationDate: new Date(),
+      daysPerWeek: {label: '', value: ''},
       notificationDays: []
     }
   });
@@ -96,7 +89,7 @@ export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
             Platform.OS === 'ios' ? (
-            <View >
+            <View className='-ml-2' >
           <DateTimePicker
             testID="dateTimePicker"
             value={value}
@@ -135,7 +128,7 @@ export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
                 </View>
             )
         )}
-        name="notificationTime"
+        name="notificationDate"
     />
         <Text className='text-sm font-bold -mb-3' >Notification Days</Text>
 

@@ -20,3 +20,11 @@ export interface Habit {
     completionDates: string[]; // All historical completion dates as ISO date strings (YYYY-MM-DD)
   }
 
+  export interface FormData {
+    habitName: string;
+    notificationDate: Date; // 2025-03-05T15:46:38.634Z
+    //We don't need the label but it was easier to process outside
+    daysPerWeek: {label: string, value: string};
+    notificationDays: string[];
+  }
+

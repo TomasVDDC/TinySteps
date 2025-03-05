@@ -8,20 +8,25 @@ import HabitForm from "~/components/HabitForm";
 import { useState } from "react";
 import useHabitStore from "~/utils/store";
 import { setWeeklyNotifications } from "~/utils/notifications";
+import { FormData } from "~/types";
+import { keepOnlyTime } from "~/utils/date-splitter";
+
+
 export default function FloatingActionButton() {
   const [open, setOpen] = useState(false);
   const { createHabitFromForm } = useHabitStore()
 
-  const handleSubmit = (data: any) => {
+  const handleSubmit = (data: FormData) => {
     createHabitFromForm(data);
-    setWeeklyNotifications();
+    const notificationTime = keepOnlyTime(data.notificationDate);
+    setWeeklyNotifications(notificationTime, data.notificationDays);
+
     setOpen(false);
   };
 
   const handleCancel = () => {
     setOpen(false);
   };
-
 
 
   return (

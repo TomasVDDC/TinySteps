@@ -42,20 +42,29 @@ const seeScheduledNotifications = async () => {
 
 }
 
-export const setWeeklyNotifications = async () => {
+const mapWeekDaysToNumbers: { [key: string]: number } = {
+    "Sunday": 1,
+    "Monday": 2,
+    "Tuesday": 3,
+    "Wednesday": 4,
+    "Thursday": 5,
+    "Friday": 6,
+    "Saturday": 7,
+}
 
-    const triggerDate = new Date(Date.now() + 60 * 1000);
-    triggerDate.setSeconds(0);
+export const setWeeklyNotifications = async (notificationTime: string, notificationDays: string[]) => {
 
-    console.log('Trigger date:', triggerDate);
+
 
     Notifications.scheduleNotificationAsync({
   content: {
-    title: 'Trigger date is ' + triggerDate,
+    title: 'Trigger date is ' + notificationTime,
   },
   trigger: {
-    type: Notifications.SchedulableTriggerInputTypes.DATE,
-    date: triggerDate,
+    type: Notifications.SchedulableTriggerInputTypes.WEEKLY,
+    weekday: mapWeekDaysToNumbers[notificationDays[0]],
+    hour: parseInt(notificationTime.split(':')[0]),
+    minute: parseInt(notificationTime.split(':')[1]),
   },
 
     });

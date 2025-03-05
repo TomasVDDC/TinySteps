@@ -5,15 +5,7 @@ import "react-native-get-random-values";
 import { v4 as uuidv4 } from 'uuid';
 import { keepOnlyDate, keepOnlyTime } from '~/utils/date-splitter';
 import { dummyHabits, dummyHabitHistory } from '~/dummy-data';
-
-
-interface FormData {
-  habitName: string;
-  notificationTime: Date;
-  //We don't need the label but it was easier to process outside
-  daysPerWeek: {label: string, value: string};
-  notificationDays: string[];
-}
+import { FormData } from '~/types';
 
 interface HabitState {
   habits: Habit[]
@@ -80,7 +72,7 @@ const useHabitStore = create<HabitState>((set, get) => ({
 
   createHabitFromForm: async (formData: FormData) => {
     
-      const timeString = keepOnlyTime(formData.notificationTime);
+      const timeString = keepOnlyTime(formData.notificationDate);
 
       const notificationSchedule = formData.notificationDays.reduce((total: Record<string, string>, day) => ({
         ...total,
