@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 import { Progress } from "~/components/ui/progress";
 import { Badge } from "~/components/ui/badge";
-import { Habit } from "~/types";
+import { Habit, HabitHistory } from "~/types";
 import { CircleCheckBig } from "~/lib/icons/CircleCheckBig";
 import { Trash } from "~/lib/icons/Trash";
 import useHabitStore from "~/utils/store";
@@ -41,11 +41,13 @@ import { seeScheduledNotifications } from "~/utils/notifications";
 // HabitItem component to display individual habits
 const HabitItem = ({
   habit,
+  habitHistory, // Just for logging purposes
   completeHabit,
   deleteHabitAndHistory,
   archiveHabitCompletions,
 }: {
   habit: Habit;
+  habitHistory: HabitHistory; // Just for logging purposes
   completeHabit: (habit: Habit) => void;
   deleteHabitAndHistory: (habit: Habit) => void;
   archiveHabitCompletions: (habitId: string) => void;
@@ -86,6 +88,7 @@ const HabitItem = ({
   const logHabit = () => {
     console.log(`🔍 Habit Details for "${habit.name}":`);
     console.log(JSON.stringify(habit, null, 2));
+    console.log(JSON.stringify(habitHistory, null, 2));
     seeScheduledNotifications();
   };
 
@@ -154,7 +157,7 @@ const HabitItem = ({
 };
 
 export default function HabitList() {
-  const { habits, fetchHabits, completeHabit, deleteHabitAndHistory, archiveHabitCompletions, fetchDummyData } = useHabitStore();
+  const { habits, habitHistories, fetchHabits, completeHabit, deleteHabitAndHistory, archiveHabitCompletions, fetchDummyData } = useHabitStore();
 
   useEffect(() => {
     // fetchHabits();
@@ -170,6 +173,7 @@ export default function HabitList() {
           completeHabit={completeHabit}
           deleteHabitAndHistory={deleteHabitAndHistory}
           archiveHabitCompletions={archiveHabitCompletions}
+          habitHistory={habitHistories.find((history) => history.habitId === habit.id) || { habitId: habit.id, completionDates: [] }}
         />
       ))}
     </>
