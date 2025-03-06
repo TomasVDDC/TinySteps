@@ -7,14 +7,19 @@ import { Habit, HabitHistory } from "~/types";
 import React, { useEffect } from "react";
 import useHabitStore from "~/utils/store";
 import { ToggleGroup, ToggleGroupIcon, ToggleGroupItem } from "~/components/ui/toggle-group";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, FadeIn, FadeOut } from "react-native-reanimated";
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing, withSpring, FadeIn, FadeOut } from "react-native-reanimated";
 
 export default function CalendarScreen() {
   const { habits, habitHistories } = useHabitStore();
   const [habitIdToggled, setHabitIdToggled] = useState<string | undefined>("");
 
+  const togglePosition = useSharedValue(0);
+
   function handleHabitIdToggled(value: string | undefined) {
+    console.log("value", value);
     setHabitIdToggled(value);
+
+    togglePosition.value = withTiming(value ? -30 : 0, { duration: 400, easing: Easing.inOut(Easing.quad) });
   }
 
   // Currently I am not using the tailwindcolors because the names are not supported by react-native-calendars
@@ -43,7 +48,11 @@ export default function CalendarScreen() {
       />
 
       <View className="absolute bottom-32 android:bottom-16 w-full flex-row gap-2 items-center justify-center">
-        <Animated.View entering={FadeIn.duration(400)} exiting={FadeOut.duration(300)}>
+        <Animated.View
+          style={useAnimatedStyle(() => ({
+            transform: [{ translateX: togglePosition.value }],
+          }))}
+        >
           <ToggleGroup
             className="flex-col gap-0 items-start bg-white rounded-md p-3 border-2 border-gray-100 dark:border-gray-700 dark:bg-gray-600"
             value={habitIdToggled}
@@ -65,8 +74,8 @@ export default function CalendarScreen() {
         {habitIdToggled && (
           <Animated.View
             className="border-2 border-gray-100 dark:border-gray-700 rounded-md bg-white dark:bg-gray-600 p-3"
-            entering={FadeIn.duration(400)}
-            exiting={FadeOut.duration(300)}
+            entering={FadeIn.duration(500)}
+            exiting={FadeOut.duration(500)}
           >
             <Text>Statistics</Text>
           </Animated.View>

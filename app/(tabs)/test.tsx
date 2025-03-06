@@ -86,27 +86,25 @@ export default function HorizontalCollapsibleItem() {
     togglePosition.value = withTiming(newState ? -40 : 0, { duration: 300 });
   };
 
-  const toggleStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: togglePosition.value }],
-  }));
-
-  const contentStyle = useAnimatedStyle(() => ({
-    width: contentWidth.value,
-  }));
-
-  const textStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(contentWidth.value, [150, 200], [0, 1]),
-  }));
-
   return (
     <View className="flex-row justify-center items-center h-[50px] overflow-hidden">
-      <Animated.View style={toggleStyle}>
+      <Animated.View
+        style={useAnimatedStyle(() => ({
+          transform: [{ translateX: togglePosition.value }],
+        }))}
+      >
         <TouchableOpacity onPress={toggleCollapse}>
           <Text className="p-2.5 bg-gray-200">Toggle</Text>
         </TouchableOpacity>
       </Animated.View>
-      <Animated.View style={contentStyle} className="h-full bg-gray-100 justify-center overflow-hidden">
-        <Animated.Text style={textStyle} className="pl-2.5">
+
+      <Animated.View style={useAnimatedStyle(() => ({ width: contentWidth.value }))} className="h-full bg-gray-100 justify-center overflow-hidden">
+        <Animated.Text
+          style={useAnimatedStyle(() => ({
+            opacity: interpolate(contentWidth.value, [150, 200], [0, 1]),
+          }))}
+          className="pl-2.5"
+        >
           {isOpen ? "Expanded Content!" : ""}
         </Animated.Text>
       </Animated.View>
