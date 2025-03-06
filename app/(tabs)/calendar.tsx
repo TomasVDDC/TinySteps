@@ -7,19 +7,21 @@ import { Habit, HabitHistory } from "~/types";
 import React, { useEffect } from "react";
 import useHabitStore from "~/utils/store";
 import { ToggleGroup, ToggleGroupIcon, ToggleGroupItem } from "~/components/ui/toggle-group";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing, withSpring, FadeIn, FadeOut } from "react-native-reanimated";
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing, withSpring, FadeIn, FadeOut, interpolate } from "react-native-reanimated";
 
 export default function CalendarScreen() {
   const { habits, habitHistories } = useHabitStore();
   const [habitIdToggled, setHabitIdToggled] = useState<string | undefined>("");
 
   const togglePosition = useSharedValue(0);
+  const contentWidth = useSharedValue(0);
 
   function handleHabitIdToggled(value: string | undefined) {
     console.log("value", value);
     setHabitIdToggled(value);
 
-    togglePosition.value = withTiming(value ? -30 : 0, { duration: 400, easing: Easing.inOut(Easing.quad) });
+    togglePosition.value = withTiming(value ? -20 : 0, { duration: 400, easing: Easing.inOut(Easing.quad) });
+    contentWidth.value = withTiming(value ? 130 : 0, { duration: 300 });
   }
 
   // Currently I am not using the tailwindcolors because the names are not supported by react-native-calendars
@@ -71,15 +73,14 @@ export default function CalendarScreen() {
           </ToggleGroup>
         </Animated.View>
 
-        {habitIdToggled && (
-          <Animated.View
-            className="border-2 border-gray-100 dark:border-gray-700 rounded-md bg-white dark:bg-gray-600 p-3"
-            entering={FadeIn.duration(500)}
-            exiting={FadeOut.duration(500)}
-          >
-            <Text>Statistics</Text>
-          </Animated.View>
-        )}
+        <Animated.View style={useAnimatedStyle(() => ({ width: contentWidth.value }))} className=" h-full bg-gray-100">
+          {habitIdToggled && (
+            <View style={{ width: 200 }}>
+              <Text style={{ paddingLeft: 10 }}>Statistics</Text>
+              <Text> {habits.find((habit) => habit.id === habitIdToggled)?.name}</Text>
+            </View>
+          )}
+        </Animated.View>
       </View>
     </>
   );

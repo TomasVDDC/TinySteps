@@ -98,7 +98,10 @@ export default function HorizontalCollapsibleItem() {
         </TouchableOpacity>
       </Animated.View>
 
-      <Animated.View style={useAnimatedStyle(() => ({ width: contentWidth.value }))} className="h-full bg-gray-100 justify-center overflow-hidden">
+      <Animated.View
+        style={useAnimatedStyle(() => ({ width: contentWidth.value }))}
+        className="h-full bg-gray-100 border-2 border-gray-200 justify-center overflow-hidden"
+      >
         <Animated.Text
           style={useAnimatedStyle(() => ({
             opacity: interpolate(contentWidth.value, [150, 200], [0, 1]),
