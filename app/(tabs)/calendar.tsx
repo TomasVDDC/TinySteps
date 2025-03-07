@@ -136,7 +136,7 @@ function calculateHabitStats(habitHistories: HabitHistory[], habits: Habit[]) {
     console.log("total", total);
     const target =
       habit?.daysPerWeek *
-      getIntervalInWeeks(new Date(history.completionDates[history.completionDates.length - 1]), new Date(history.completionDates[0]));
+      getIntervalInWeeks(new Date(history.completionDates[0]), new Date(history.completionDates[history.completionDates.length - 1]));
     console.log("target", target);
     const completionRate = total > 0 ? Math.round((total / target) * 100) : 0;
     console.log("completionRate", completionRate);
