@@ -13,15 +13,13 @@ export default function CalendarScreen() {
   const { habits, habitHistories } = useHabitStore();
   const [habitIdToggled, setHabitIdToggled] = useState<string | undefined>("");
 
-  const togglePosition = useSharedValue(0);
   const contentWidth = useSharedValue(0);
 
   function handleHabitIdToggled(value: string | undefined) {
     console.log("value", value);
     setHabitIdToggled(value);
 
-    togglePosition.value = withTiming(value ? -20 : 0, { duration: 400, easing: Easing.inOut(Easing.quad) });
-    contentWidth.value = withTiming(value ? 130 : 0, { duration: 300 });
+    contentWidth.value = withTiming(value ? 170 : 0, { duration: 300 });
   }
 
   // Currently I am not using the tailwindcolors because the names are not supported by react-native-calendars
@@ -50,32 +48,29 @@ export default function CalendarScreen() {
       />
 
       <View className="absolute bottom-32 android:bottom-16 w-full flex-row gap-2 items-center justify-center">
-        <Animated.View
-          style={useAnimatedStyle(() => ({
-            transform: [{ translateX: togglePosition.value }],
-          }))}
+        <ToggleGroup
+          className="flex-col gap-0 items-start bg-white rounded-md p-3 border-2 border-gray-100 dark:border-gray-700 dark:bg-gray-600"
+          value={habitIdToggled}
+          onValueChange={handleHabitIdToggled}
+          type="single"
         >
-          <ToggleGroup
-            className="flex-col gap-0 items-start bg-white rounded-md p-3 border-2 border-gray-100 dark:border-gray-700 dark:bg-gray-600"
-            value={habitIdToggled}
-            onValueChange={handleHabitIdToggled}
-            type="single"
-          >
-            {habitHistories.map((History, index) => (
-              <ToggleGroupItem size="none" key={index} value={History.habitId} aria-label={History.habitId} asChild>
-                <View className="flex-row items-center gap-2 px-2 py-[1px] ">
-                  {/* Tailwind classnames need to be written in full, not be dinamically generated. Cant do this bg-${Colors[index]}-300 */}
-                  <View className="w-3 h-3 rounded-full mt-[1px] mx-[1px]" style={{ backgroundColor: habitColorMap[History.habitId] }} />
-                  <Text>{habits.find((habit) => habit.id === History.habitId)?.name}</Text>
-                </View>
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        </Animated.View>
+          {habitHistories.map((History, index) => (
+            <ToggleGroupItem size="none" key={index} value={History.habitId} aria-label={History.habitId} asChild>
+              <View className="flex-row items-center gap-2 px-2 py-[1px] ">
+                {/* Tailwind classnames need to be written in full, not be dinamically generated. Cant do this bg-${Colors[index]}-300 */}
+                <View className="w-3 h-3 rounded-full mt-[1px] mx-[1px]" style={{ backgroundColor: habitColorMap[History.habitId] }} />
+                <Text>{habits.find((habit) => habit.id === History.habitId)?.name}</Text>
+              </View>
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
 
-        <Animated.View style={useAnimatedStyle(() => ({ width: contentWidth.value }))} className=" h-full bg-gray-100">
+        <Animated.View
+          style={useAnimatedStyle(() => ({ width: contentWidth.value }))}
+          className={` h-full bg-white ${habitIdToggled ? "border-2 border-gray-100 dark:border-gray-700 dark:bg-gray-600 rounded-md" : ""} `}
+        >
           {habitIdToggled && (
-            <View style={{ width: 200 }}>
+            <View style={{ width: 150 }}>
               <Text style={{ paddingLeft: 10 }}>Statistics</Text>
               <Text> {habits.find((habit) => habit.id === habitIdToggled)?.name}</Text>
             </View>
