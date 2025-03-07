@@ -8,8 +8,18 @@ export const keepOnlyTime = (date: Date) => {
   return date.toISOString().split("T")[1].split(":").slice(0, 2).join(":");
 };
 
-export const getIntervalInWeeks = (startDate: Date, endDate: Date) => {
-  const timeDiff = endDate.getTime() - startDate.getTime();
-  const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-  return Math.ceil(daysDiff / 7);
+export const getIntervalInWeeks = (oldDate: Date, recentDate: Date) => {
+  const week = 7 * 24 * 60 * 60 * 1000;
+  const day = 24 * 60 * 60 * 1000;
+
+  function startOfWeek(dt: Date) {
+    const weekday = dt.getDay();
+    return new Date(dt.getTime() - Math.abs(0 - weekday) * day);
+  }
+
+  function weeksBetween(d1: Date, d2: Date) {
+    return Math.ceil((startOfWeek(recentDate) - startOfWeek(oldDate)) / week);
+  }
+
+  return weeksBetween(oldDate, recentDate);
 };
