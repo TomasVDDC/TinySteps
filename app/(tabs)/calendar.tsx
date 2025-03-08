@@ -82,11 +82,12 @@ export default function CalendarScreen() {
         >
           {habitIdToggled && (
             <View style={{ width: maxContentWidth }}>
-              <View className="flex-row items-center mb-3 border-b border-gray-100 dark:border-gray-500 pb-2">
+              <View
+                style={{ width: maxContentWidth - 30 }}
+                className=" flex-row items-center mb-3 border-b border-gray-100 dark:border-gray-500 pb-2"
+              >
                 <View className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: habitColorMap[habitIdToggled] || "gray" }} />
-                <Text style={{ width: maxContentWidth - 30 }} className="text-lg font-bold text-wrap">
-                  {habits.find((habit) => habit.id === habitIdToggled)?.name}
-                </Text>
+                <Text className="text-lg font-bold text-wrap">{habits.find((habit) => habit.id === habitIdToggled)?.name}</Text>
               </View>
 
               <Text className="text-sm text-gray-500 dark:text-gray-300 mb-1">Statistics</Text>
