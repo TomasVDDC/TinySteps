@@ -3,7 +3,7 @@ import React from "react";
 import { Platform, Pressable } from "react-native";
 import { ThemeToggle } from "~/components/ThemeToggle";
 import { Home } from "~/lib/icons/Home";
-import { Info } from "~/lib/icons/Info";
+import { Calendar } from "~/lib/icons/Calendar";
 
 export default function TabLayout() {
   return (
@@ -33,19 +33,7 @@ export default function TabLayout() {
         name="calendar"
         options={{
           title: "Calendar",
-          tabBarIcon: ({ color }) => <Info size={28} color={color} />,
-          tabBarShowLabel: true,
-          // This is to prevent the calendar from being lazy loaded - took too long to load
-          lazy: false,
-          tabBarButton: (props) => <Pressable {...props} android_ripple={{ color: "transparent" }} style={props.style} />,
-        }}
-      />
-
-      <Tabs.Screen
-        name="test"
-        options={{
-          title: "Test",
-          tabBarIcon: ({ color }) => <Info size={28} color={color} />,
+          tabBarIcon: ({ color }) => <Calendar size={28} color={color} />,
           tabBarShowLabel: true,
           // This is to prevent the calendar from being lazy loaded - took too long to load
           lazy: false,
