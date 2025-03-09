@@ -17,6 +17,7 @@ export default function CalendarScreen() {
   const [habitIdToggled, setHabitIdToggled] = useState<string | undefined>();
   const [markedDates, setMarkedDates] = useState<{ [date: string]: { dots: { key: string; color: string }[] } }>({});
   const [habitStats, setHabitStats] = useState<{ [habitId: string]: { total: number; weeklyCompletionRate: number } }>({});
+  const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth());
   const [completionsInMonth, setCompletionsInMonth] = useState<{ numberCompleted: number; goalForMonth: number }>({
     numberCompleted: 0,
     goalForMonth: 0,
@@ -31,6 +32,12 @@ export default function CalendarScreen() {
     // When the user opens the calendar the first habit should be toggled to show the stats
     handleHabitIdToggled(habits[0]?.id);
   }, [habits]);
+
+  useEffect(() => {
+    if (habitIdToggled) {
+      setCompletionsInMonth(calculateCompletedHabitsInMonth(habitIdToggled, habitHistories, habits, currentMonth));
+    }
+  }, [currentMonth, habitIdToggled]);
 
   const contentWidth = useSharedValue(0);
   const maxContentWidth = 160;
@@ -65,7 +72,9 @@ export default function CalendarScreen() {
   return (
     <>
       <CalendarList
-        onVisibleMonthsChange={handleVisibleMonthsChange}
+        onVisibleMonthsChange={(months) => {
+          setCurrentMonth(months[0].month - 1); // -1 so that January is 0, February is 1, etc. (Standard for JS Date);
+        }}
         pastScrollRange={24}
         futureScrollRange={3}
         scrollEnabled={true}
@@ -74,7 +83,7 @@ export default function CalendarScreen() {
         markedDates={markedDates}
       />
 
-      <View className="absolute top-4 left-4 bg-white dark:bg-gray-600 rounded-xl p-3 shadow-md border border-gray-100 dark:border-gray-700">
+      <View className="absolute top-4 left-4 bg-white dark:bg-gray-600 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-700">
         <View className="flex-row items-center mb-2">
           <View className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: habitIdToggled ? habitColorMap[habitIdToggled] : "gray" }} />
           <Text className="font-medium">Monthly Progress</Text>
@@ -105,7 +114,7 @@ export default function CalendarScreen() {
         )}
       </View>
 
-      <View className="absolute bottom-32 shadow-md android:bottom-16 w-full flex-row gap-2 items-center justify-center">
+      <View className="absolute bottom-32 shadow-sm android:bottom-16 w-full flex-row gap-2 items-center justify-center">
         <ToggleGroup
           className="flex-col gap-0 items-start bg-white rounded-md p-3 border-2 border-gray-100 dark:border-gray-700 dark:bg-gray-600"
           value={habitIdToggled}
@@ -215,6 +224,7 @@ function calculateCompletedHabitsInMonth(habitId: string | undefined, habitHisto
     return completionDateObject.getMonth() === month;
   });
 
+  console.log("completedHabits", completedHabits);
   const firstCompletionDateOfMonth = new Date(completedHabits[0]);
 
   const weekOfMonth = getWeekOfMonth(firstCompletionDateOfMonth);

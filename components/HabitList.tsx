@@ -36,6 +36,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
+
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
+
 import { seeScheduledNotifications } from "~/utils/notifications";
 
 // HabitItem component to display individual habits
@@ -52,7 +55,8 @@ const HabitItem = ({
   deleteHabitAndHistory: (habit: Habit) => void;
   archiveHabitCompletions: (habitId: string) => void;
 }) => {
-  const [isAlertDialogOpen, setAlertDialogOpen] = useState(false);
+  const [isDeleteAlertDialogOpen, setDeleteAlertDialogOpen] = useState(false);
+  const [isCompleteDialogOpen, setCompleteDialogOpen] = useState(false);
 
   const insets = useSafeAreaInsets();
   const contentInsets = {
@@ -75,6 +79,7 @@ const HabitItem = ({
   const handleCompleteHabit = () => {
     completeHabit(habit);
     archiveHabitCompletions(habit.id);
+    setCompleteDialogOpen(true);
   };
 
   const handleDeleteHabit = () => {
@@ -109,9 +114,25 @@ const HabitItem = ({
         >
           <View className="flex-row justify-between items-center mb-2">
             <View className="flex-row items-center flex-1">
-              <Pressable onPress={isCompletedToday() ? null : handleCompleteHabit} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-                <CircleCheckBig size={24} style={{ marginRight: 8 }} className={isCompletedToday() ? "text-green-500 " : "text-gray-400 "} />
-              </Pressable>
+              <Dialog open={isCompleteDialogOpen} onOpenChange={setCompleteDialogOpen}>
+                <DialogTrigger asChild>
+                  <Pressable onPress={isCompletedToday() ? null : handleCompleteHabit} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                    <CircleCheckBig size={24} style={{ marginRight: 8 }} className={isCompletedToday() ? "text-green-500 " : "text-gray-400 "} />
+                  </Pressable>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Congratulations! 🎉</DialogTitle>
+                    <DialogDescription>{`You've successfully completed ${habit.name}! `}</DialogDescription>
+                  </DialogHeader>
+                  {/* <DialogFooter>
+                    <Button onPress={() => setCompleteDialogOpen(false)}>
+                      <Text>Close</Text>
+                    </Button>
+                  </DialogFooter> */}
+                </DialogContent>
+              </Dialog>
+
               <Text className="flex-1 text-lg">{habit.name}</Text>
             </View>
             <Badge variant="outline" className="ml-2">
@@ -129,7 +150,7 @@ const HabitItem = ({
           <Text>Log Habit</Text>
         </ContextMenuItem>
 
-        <AlertDialog open={isAlertDialogOpen} onOpenChange={setAlertDialogOpen}>
+        <AlertDialog open={isDeleteAlertDialogOpen} onOpenChange={setDeleteAlertDialogOpen}>
           <AlertDialogTrigger asChild>
             <ContextMenuItem inset closeOnPress={false}>
               <Text className="text-destructive font-semibold">Delete Habit</Text>
