@@ -1,7 +1,6 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { Platform, Pressable } from "react-native";
-import { ThemeToggle } from "~/components/ThemeToggle";
 import { Home } from "~/lib/icons/Home";
 import { Calendar } from "~/lib/icons/Calendar";
 
@@ -23,7 +22,6 @@ export default function TabLayout() {
         options={{
           title: "Habits",
           headerShown: false,
-          headerRight: () => <ThemeToggle />,
           tabBarIcon: ({ color }) => <Home size={28} color={color} />,
           tabBarShowLabel: true,
           tabBarButton: (props) => <Pressable {...props} android_ripple={{ color: "transparent" }} style={props.style} />,

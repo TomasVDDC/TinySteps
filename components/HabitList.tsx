@@ -86,10 +86,6 @@ const HabitItem = ({
     deleteHabitAndHistory(habit);
   };
 
-  const handleLongPress = () => {
-    console.log(habit);
-  };
-
   const logHabit = () => {
     console.log(`🔍 Habit Details for "${habit.name}":`);
     console.log(JSON.stringify(habit, null, 2));
@@ -108,14 +104,14 @@ const HabitItem = ({
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <View
-          className={`p-4 active:opacity-50 active:scale-95 rounded-lg mb-3 border ${
+          className={`p-6 active:opacity-50 active:scale-95 rounded-lg mb-3 border ${
             isCompletedToday() ? "border-green-500" : "border-gray-200 dark:border-gray-700"
           }`}
         >
           <View className="flex-row justify-between items-center mb-2">
             <View className="flex-row items-center flex-1">
               <Dialog open={isCompleteDialogOpen} onOpenChange={setCompleteDialogOpen}>
-                <DialogTrigger asChild>
+                <DialogTrigger>
                   <Pressable onPress={isCompletedToday() ? null : handleCompleteHabit} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
                     <CircleCheckBig size={24} style={{ marginRight: 8 }} className={isCompletedToday() ? "text-green-500 " : "text-gray-400 "} />
                   </Pressable>
