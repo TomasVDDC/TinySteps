@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "tiny-steps-final",
+    "name": "Tiny Steps",
     "slug": "tiny-steps-final",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -24,8 +24,14 @@
           "dark": "./assets/icons/ios-dark.png",
           "light": "./assets/icons/ios-light.png",
           "tinted": "./assets/icons/ios-tinted.png"
+        },
+        {
+          "dark": "./assets/icons/ios-dark.png",
+          "light": "./assets/icons/ios-light.png",
+          "tinted": "./assets/icons/ios-tinted.png"
         }
-      ]
+      ],
+      "bundleIdentifier": "com.tomasvddc.tinystepsfinal"
     },
     "android": {
       "adaptiveIcon": {

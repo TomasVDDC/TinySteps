@@ -2,7 +2,6 @@ import { View, StyleSheet } from "react-native";
 import { Text } from "~/components/ui/text";
 import { Calendar, CalendarList, Agenda, CalendarProps, DateData } from "react-native-calendars";
 import { useRef, useState } from "react";
-// import { dummyHabitHistories } from "~/dummy-data";
 import { Habit, HabitHistory } from "~/types";
 import React, { useEffect } from "react";
 import useHabitStore from "~/utils/store";
@@ -13,7 +12,7 @@ import { differenceInWeeks, getWeekOfMonth, getWeeksInMonth } from "date-fns";
 import { _ } from "lodash";
 
 export default function CalendarScreen() {
-  const { habits, habitHistories } = useHabitStore();
+  const { habits, habitHistories, fetchHabitHistories, fetchHabits } = useHabitStore();
   const [habitIdToggled, setHabitIdToggled] = useState<string | undefined>();
   const [markedDates, setMarkedDates] = useState<{ [date: string]: { dots: { key: string; color: string }[] } }>({});
   const [habitStats, setHabitStats] = useState<{ [habitId: string]: { total: number; weeklyCompletionRate: number } }>({});
@@ -24,17 +23,20 @@ export default function CalendarScreen() {
   });
 
   useEffect(() => {
+    console.log("habitHistories", habitHistories);
+    console.log("habits", habits);
     setMarkedDates(transformHabitHistories(habitHistories, habitIdToggled, habitColorMap));
     setHabitStats(calculateHabitStats(habitHistories, habits));
   }, [habitIdToggled, habitHistories]);
 
   useEffect(() => {
     // When the user opens the calendar the first habit should be toggled to show the stats
-    handleHabitIdToggled(habits[0]?.id);
+    handleHabitIdToggled(habitHistories[0]?.habitId);
   }, [habits]);
 
   useEffect(() => {
-    if (habitIdToggled) {
+    if (habitHistories.length > 0) {
+      console.log("habitHistories", habitHistories);
       setCompletionsInMonth(calculateCompletedHabitsInMonth(habitIdToggled, habitHistories, habits, currentMonth));
     }
   }, [currentMonth, habitIdToggled]);
@@ -61,16 +63,8 @@ export default function CalendarScreen() {
     };
   }, {});
 
-  function handleVisibleMonthsChange(months: DateData[]) {
-    console.log("now these months are visible", months);
-    const month = months[0].month - 1; // -1 so that January is 0, February is 1, etc. (Standard for JS Date)
-    const completionsInMonth = calculateCompletedHabitsInMonth(habitIdToggled, habitHistories, habits, month);
-    console.log("completedHabitsInMonth", completionsInMonth);
-    setCompletionsInMonth(completionsInMonth);
-  }
-
   return (
-    <>
+    <View className="flex-1 pt-16">
       <CalendarList
         onVisibleMonthsChange={(months) => {
           setCurrentMonth(months[0].month - 1); // -1 so that January is 0, February is 1, etc. (Standard for JS Date);
@@ -82,8 +76,8 @@ export default function CalendarScreen() {
         markingType={"multi-dot"}
         markedDates={markedDates}
       />
-
-      <View className="absolute top-4 left-4 bg-white dark:bg-gray-600 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-700">
+      {/* Monthly Progress */}
+      <View className="absolute top-20 left-4 bg-white dark:bg-gray-600 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-700">
         <View className="flex-row items-center mb-2">
           <View className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: habitIdToggled ? habitColorMap[habitIdToggled] : "gray" }} />
           <Text className="font-medium">Monthly Progress</Text>
@@ -114,24 +108,27 @@ export default function CalendarScreen() {
         )}
       </View>
 
-      <View className="absolute bottom-32 shadow-sm android:bottom-16 w-full flex-row gap-2 items-center justify-center">
-        <ToggleGroup
-          className="flex-col gap-0 items-start bg-white rounded-md p-3 border-2 border-gray-100 dark:border-gray-700 dark:bg-gray-600"
-          value={habitIdToggled}
-          onValueChange={handleHabitIdToggled}
-          type="single"
-        >
-          {habitHistories.map((History, index) => (
-            <ToggleGroupItem size="none" key={index} value={History.habitId} aria-label={History.habitId} asChild>
-              <View className="flex-row items-center gap-2 px-2 py-[1px] ">
-                {/* Tailwind classnames need to be written in full, not be dinamically generated. Cant do this bg-${Colors[index]}-300 */}
-                <View className="w-3 h-3 rounded-full mt-[1px] mx-[1px]" style={{ backgroundColor: habitColorMap[History.habitId] }} />
-                <Text>{habits.find((habit) => habit.id === History.habitId)?.name}</Text>
-              </View>
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
+      {/* Habit menu */}
 
+      <View className="absolute  ios:bottom-24 shadow-sm android:bottom-8 w-full flex-row gap-2 items-center justify-center">
+        {habitHistories.length > 0 && (
+          <ToggleGroup
+            className="flex-col gap-0 items-start bg-white rounded-md p-3 mx-3 border-2 border-gray-100 dark:border-gray-700 dark:bg-gray-600"
+            value={habitIdToggled}
+            onValueChange={handleHabitIdToggled}
+            type="single"
+          >
+            {habitHistories.map((History, index) => (
+              <ToggleGroupItem size="none" key={index} value={History.habitId} aria-label={History.habitId} asChild>
+                <View className="flex-row items-center gap-2 px-2 py-[1px] ">
+                  {/* Tailwind classnames need to be written in full, not be dinamically generated. Cant do this bg-${Colors[index]}-300 */}
+                  <View className="w-3 h-3 rounded-full mt-[1px] mx-[1px]" style={{ backgroundColor: habitColorMap[History.habitId] }} />
+                  <Text className="w-32">{habits.find((habit) => habit.id === History.habitId)?.name}</Text>
+                </View>
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        )}
         <Animated.View
           style={useAnimatedStyle(() => ({ width: contentWidth.value }))}
           className={`h-full bg-white dark:bg-gray-600 ${habitIdToggled ? "border-2 border-gray-100 dark:border-gray-700 rounded-md p-3" : ""}`}
@@ -140,15 +137,15 @@ export default function CalendarScreen() {
             <View style={{ width: maxContentWidth }}>
               <View
                 style={{ width: maxContentWidth - 30 }}
-                className=" flex-row items-center mb-3 border-b border-gray-100 dark:border-gray-500 pb-2"
+                className="  flex-row items-center mb-3 border-b border-gray-100 dark:border-gray-500 pb-2"
               >
-                <View className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: habitColorMap[habitIdToggled] || "gray" }} />
+                <View className="w-3 h-3  rounded-full mr-2" style={{ backgroundColor: habitColorMap[habitIdToggled] || "gray" }} />
                 <Text className="text-lg font-bold text-wrap">{habits.find((habit) => habit.id === habitIdToggled)?.name}</Text>
               </View>
 
               <Text className="text-sm text-gray-500 dark:text-gray-300 mb-1">Statistics</Text>
 
-              <View style={{ width: 120 }} className="mt-2 space-y-3">
+              <View style={{ width: 120 }} className="  mt-2 space-y-3">
                 <View>
                   <View className="flex-row justify-between">
                     <Text className="text-gray-600 dark:text-gray-300">Total</Text>
@@ -181,7 +178,7 @@ export default function CalendarScreen() {
           )}
         </Animated.View>
       </View>
-    </>
+    </View>
   );
 }
 
@@ -218,13 +215,16 @@ function calculateHabitStats(habitHistories: HabitHistory[], habits: Habit[]) {
 
 function calculateCompletedHabitsInMonth(habitId: string | undefined, habitHistories: HabitHistory[], habits: Habit[], month: number) {
   const history = habitHistories.find((history) => history.habitId === habitId);
-
+  console.log("history?.completionDates", history?.completionDates);
   const completedHabits = history?.completionDates.filter((completionDate) => {
     const completionDateObject = new Date(completionDate);
     return completionDateObject.getMonth() === month;
   });
 
   console.log("completedHabits", completedHabits);
+  if (!completedHabits) {
+    return { numberCompleted: 0, goalForMonth: 0 };
+  }
   const firstCompletionDateOfMonth = new Date(completedHabits[0]);
 
   const weekOfMonth = getWeekOfMonth(firstCompletionDateOfMonth);

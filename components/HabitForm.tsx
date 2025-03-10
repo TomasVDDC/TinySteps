@@ -54,7 +54,7 @@ export default function HabitForm({ onSubmit, onCancel }: HabitFormProps) {
         render={({ field: { onChange, onBlur, value } }) => (
           <Select value={value} onValueChange={onChange}>
             <SelectTrigger className="w-[60px]">
-              <SelectValue className="text-foreground text-sm native:text-lg" />
+              <SelectValue className="text-foreground text-sm native:text-lg" placeholder="1" />
             </SelectTrigger>
             <SelectContent className="w-[70px]">
               <ScrollView className="max-h-32">

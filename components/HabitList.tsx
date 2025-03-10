@@ -125,11 +125,6 @@ const HabitItem = ({
                     <DialogTitle>Congratulations! 🎉</DialogTitle>
                     <DialogDescription>{`You've successfully completed ${habit.name}! `}</DialogDescription>
                   </DialogHeader>
-                  {/* <DialogFooter>
-                    <Button onPress={() => setCompleteDialogOpen(false)}>
-                      <Text>Close</Text>
-                    </Button>
-                  </DialogFooter> */}
                 </DialogContent>
               </Dialog>
 
@@ -178,25 +173,34 @@ const HabitItem = ({
 };
 
 export default function HabitList() {
-  const { habits, habitHistories, fetchHabits, completeHabit, deleteHabitAndHistory, archiveHabitCompletions, fetchDummyData } = useHabitStore();
+  const { habits, habitHistories, fetchHabits, completeHabit, deleteHabitAndHistory, archiveHabitCompletions, fetchHabitHistories, fetchDummyData } =
+    useHabitStore();
 
   useEffect(() => {
-    // fetchHabits();
-    fetchDummyData();
+    fetchHabits();
+    fetchHabitHistories();
+    //fetchDummyData();
   }, []);
 
   return (
     <>
-      {habits.map((habit: Habit) => (
-        <HabitItem
-          key={habit.id}
-          habit={habit}
-          completeHabit={completeHabit}
-          deleteHabitAndHistory={deleteHabitAndHistory}
-          archiveHabitCompletions={archiveHabitCompletions}
-          habitHistory={habitHistories.find((history) => history.habitId === habit.id) || { habitId: habit.id, completionDates: [] }}
-        />
-      ))}
+      {habits.length > 0 &&
+        habits.map((habit: Habit) => (
+          <HabitItem
+            key={habit.id}
+            habit={habit}
+            completeHabit={completeHabit}
+            deleteHabitAndHistory={deleteHabitAndHistory}
+            archiveHabitCompletions={archiveHabitCompletions}
+            habitHistory={habitHistories.find((history) => history.habitId === habit.id) || { habitId: habit.id, completionDates: [] }}
+          />
+        ))}
+      {habits.length === 0 && (
+        <Text className="text-center text-gray-500 mt-72">
+          {" "}
+          Create your first habit by tapping on the plus button at the bottom right of the screen!
+        </Text>
+      )}
     </>
   );
 }

@@ -22,7 +22,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Habits",
-
+          headerShown: false,
           headerRight: () => <ThemeToggle />,
           tabBarIcon: ({ color }) => <Home size={28} color={color} />,
           tabBarShowLabel: true,
@@ -33,6 +33,7 @@ export default function TabLayout() {
         name="calendar"
         options={{
           title: "Calendar",
+          headerShown: false,
           tabBarIcon: ({ color }) => <Calendar size={28} color={color} />,
           tabBarShowLabel: true,
           // This is to prevent the calendar from being lazy loaded - took too long to load
