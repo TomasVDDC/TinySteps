@@ -4,8 +4,11 @@ Tiny Steps is a simple habit tracking app built with Expo. Inspired by _Atomic H
 
 ## Screenshots
 
-![Monthly calendar view showing habit completion](./assets/screenshots/calendar.png)
-![Weekly habits view showing progress bars](./assets/screenshots/home.png)
+<div style="display: flex; gap: 10px;">
+  <img src="./assets/screenshots/home.png" alt="Weekly habits view showing progress bars" width="48%">
+  <img src="./assets/screenshots/calendar.png" alt="Monthly calendar view showing habit completion" width="48%">
+    <img src="./assets/screenshots/calendar2.png" alt="Monthly calendar view showing habit completion" width="48%">
+</div>
 
 ## Features
 
