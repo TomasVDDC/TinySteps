@@ -1,16 +1,15 @@
-# Starter base
+# Tiny Steps - Habit Tracker
 
-A starting point to help you set up your project quickly and use the common components provided by `react-native-reusables`. The idea is to make it easier for you to get started.
+Tiny Steps is a simple habit tracking app built with Expo. Inspired by _Atomic Habits_ by James Clear, it helps you build and maintain habits through small, consistent actions.
 
 ## Features
 
-- NativeWind v4
-- Dark and light mode
-  - Android Navigation Bar matches mode
-  - Persistent mode
-- Common components
-  - ThemeToggle, Avatar, Button, Card, Progress, Text, Tooltip
+- Track daily habits with ease
+- Data stored locally on your device
+- Notification support to keep you on track
 
-<img src="https://github.com/mrzachnugent/react-native-reusables/assets/63797719/42c94108-38a7-498b-9c70-18640420f1bc"
-     alt="starter-base-template"
-     style="width:270px;" />
+## Picking a Habit
+
+Choose a habit that’s easy to do—something so simple you can’t fail. If you miss a day, no problem, just don’t miss twice! Instead of aiming for a 10-mile run, start with “lace up your shoes and go outside.” Most times, you’ll end up running plenty anyway.
+
+Start small, stay consistent, and watch your habits grow!
