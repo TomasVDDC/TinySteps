@@ -1,1 +1,0 @@
-Trying to make the app work when starting from 0 habit data. 

@@ -13,24 +13,6 @@ Notifications.setNotificationHandler({
   }),
 });
 
-// const SendNotification = async () => {
-//   console.log("Sending notification...");
-
-//   const triggerDate = new Date(Date.now() + 60 * 1000);
-//   triggerDate.setSeconds(0);
-
-//   console.log("Trigger date:", triggerDate);
-
-//   Notifications.scheduleNotificationAsync({
-//     content: {
-//       title: "Trigger date is " + triggerDate,
-//     },
-//     trigger: {
-//       type: Notifications.SchedulableTriggerInputTypes.DATE,
-//       date: triggerDate,
-//     },
-//   });
-// };
 export const seeScheduledNotifications = async () => {
   const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
   console.log("==========================================");
@@ -54,11 +36,11 @@ const mapWeekDaysToNumbers: { [key: string]: number } = {
   Saturday: 7,
 };
 
-export const setWeeklyNotifications = async (notificationTime: string, notificationDays: string[]) => {
+export const setWeeklyNotifications = async (notificationTime: string, notificationDays: string[], habitName: string) => {
   notificationDays.forEach(async (day) => {
     Notifications.scheduleNotificationAsync({
       content: {
-        title: "Trigger date is " + notificationTime,
+        title: `Time for your habit: ${habitName}!`,
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.WEEKLY,

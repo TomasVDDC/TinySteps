@@ -1,0 +1,2 @@
+- Still need to make the notifications actually have the correct text.
+- Reset the recent completions every week.
