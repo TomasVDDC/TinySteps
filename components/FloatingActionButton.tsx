@@ -23,7 +23,7 @@ export default function FloatingActionButton() {
 
     // Set weekly notifications
     const notificationTime = keepOnlyTime(data.notificationDate);
-    setWeeklyNotifications(notificationTime, data.notificationDays);
+    setWeeklyNotifications(notificationTime, data.notificationDays, data.habitName);
 
     setOpen(false);
   };

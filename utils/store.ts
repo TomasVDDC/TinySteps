@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { keepOnlyDate, keepOnlyTime } from "~/utils/date-splitter";
 import { dummyHabits, dummyHabitHistories } from "~/dummy-data";
 import { FormData } from "~/types";
+import { isSameWeek } from "date-fns";
 
 interface HabitState {
   habits: Habit[];
@@ -19,6 +20,7 @@ interface HabitState {
   completeHabit: (habit: Habit) => Promise<void>;
   deleteHabitAndHistory: (habit: Habit) => Promise<void>;
   archiveHabitCompletions: (habitId: string) => Promise<void>;
+  resetOldCompletions: () => Promise<void>;
 
   fetchDummyData: () => Promise<void>;
 }
@@ -148,6 +150,35 @@ const useHabitStore = create<HabitState>((set, get) => ({
 
     set({ habitHistories: updatedHistories });
     await storeHistoryData(updatedHistories);
+  },
+
+  resetOldCompletions: async () => {
+    const { habits } = get();
+    const currentDate = new Date();
+
+    const updatedHabits = habits.map((habit: Habit) => {
+      // Skip if no completions
+      if (habit.recentCompletions.length === 0) return habit;
+
+      // Get the last completion date
+      const lastCompletion = new Date(habit.recentCompletions[habit.recentCompletions.length - 1]);
+
+      // Check if in same week using date-fns
+      const sameWeek = isSameWeek(lastCompletion, currentDate);
+
+      // If not in the same week, reset completions
+      if (!sameWeek) {
+        return { ...habit, recentCompletions: [] };
+      }
+
+      return habit;
+    });
+
+    // Update if any habits were changed
+    if (JSON.stringify(habits) !== JSON.stringify(updatedHabits)) {
+      set({ habits: updatedHabits });
+      await storeData(updatedHabits);
+    }
   },
 }));
 

@@ -169,13 +169,23 @@ const HabitItem = ({
 };
 
 export default function HabitList() {
-  const { habits, habitHistories, fetchHabits, completeHabit, deleteHabitAndHistory, archiveHabitCompletions, fetchHabitHistories, fetchDummyData } =
-    useHabitStore();
+  const {
+    habits,
+    habitHistories,
+    fetchHabits,
+    completeHabit,
+    deleteHabitAndHistory,
+    archiveHabitCompletions,
+    fetchHabitHistories,
+    fetchDummyData,
+    resetOldCompletions,
+  } = useHabitStore();
 
   useEffect(() => {
     // fetchHabits();
     // fetchHabitHistories();
     fetchDummyData();
+    resetOldCompletions();
   }, []);
 
   return (

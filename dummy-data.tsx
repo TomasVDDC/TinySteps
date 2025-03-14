@@ -89,7 +89,7 @@ export const dummyHabits: Habit[] = [
       friday: "19:30",
       sunday: "15:00",
     },
-    recentCompletions: [getTodayString(), getDaysAgoString(3), getDaysAgoString(6)],
+    recentCompletions: [getDaysAgoString(25), getDaysAgoString(35), getDaysAgoString(20)],
     createdAt: getDaysAgoString(15),
   },
 ];
