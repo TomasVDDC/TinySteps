@@ -182,9 +182,9 @@ export default function HabitList() {
   } = useHabitStore();
 
   useEffect(() => {
-    // fetchHabits();
-    // fetchHabitHistories();
-    fetchDummyData();
+    fetchHabits();
+    fetchHabitHistories();
+    // fetchDummyData();
     resetOldCompletions();
   }, []);
 
